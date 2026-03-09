@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String         @id @default(cuid())
+  username     String         @unique
+  email        String         @unique
+  passwordHash String
+  avatar       String?
+  streakCount  Int            @default(0)
+  totalSolved  Int            @default(0)
+  lastActive   DateTime       @default(now())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  submissions  Submission[]
+  activities   UserActivity[]
+  progress     UserProgress[]
+}
+
+model Problem {
+  id              String           @id @default(cuid())
+  title           String
+  slug            String           @unique
+  description     String
+  difficulty      Difficulty
+  topic           Topic
+  constraints     String
+  examples        String
+  starterCode     String
+  hints           String?
+  solution        String?
+  acceptance      Float            @default(0)
+  frequency       Int              @default(0)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  companies       CompanyProblem[]
+  dailyChallenges DailyChallenge[]
+  submissions     Submission[]
+  testCases       TestCase[]
+}
+
+model TestCase {
+  id             String  @id @default(cuid())
+  problemId      String
+  input          String
+  expectedOutput String
+  isHidden       Boolean @default(false)
+  problem        Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+}
+
+model Submission {
+  id        String           @id @default(cuid())
+  userId    String
+  problemId String
+  code      String
+  language  String
+  status    SubmissionStatus
+  runtime   Int?
+  memory    Int?
+  createdAt DateTime         @default(now())
+  problem   Problem          @relation(fields: [problemId], references: [id])
+  user      User             @relation(fields: [userId], references: [id])
+}
+
+model Company {
+  id       String           @id @default(cuid())
+  name     String           @unique
+  slug     String           @unique
+  logo     String?
+  problems CompanyProblem[]
+}
+
+model CompanyProblem {
+  companyId String
+  problemId String
+  frequency Int       @default(0)
+  lastAsked DateTime?
+  problem   Problem   @relation(fields: [problemId], references: [id])
+  company   Company   @relation(fields: [companyId], references: [id])
+
+  @@id([companyId, problemId])
+}
+
+model UserProgress {
+  id     String @id @default(cuid())
+  userId String
+  topic  Topic
+  solved Int    @default(0)
+  total  Int    @default(0)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, topic])
+}
+
+model UserActivity {
+  id     String   @id @default(cuid())
+  userId String
+  date   DateTime
+  count  Int      @default(0)
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+}
+
+model DailyChallenge {
+  id        String   @id @default(cuid())
+  problemId String
+  date      DateTime @unique
+  createdAt DateTime @default(now())
+  problem   Problem  @relation(fields: [problemId], references: [id])
+}
+
+model Discussion {
+  id        String            @id @default(cuid())
+  title     String
+  content   String
+  userId    String
+  problemId String?
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  replies   DiscussionReply[]
+}
+
+model DiscussionReply {
+  id           String     @id @default(cuid())
+  content      String
+  userId       String
+  discussionId String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  discussion   Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum Topic {
+  ARRAYS
+  LINKED_LISTS
+  TREES
+  GRAPHS
+  STACKS
+  QUEUES
+  HEAPS
+  HASH_TABLES
+  SORTING
+  SEARCHING
+  DYNAMIC_PROGRAMMING
+  RECURSION
+  GREEDY
+  STRINGS
+  MATH
+  BACKTRACKING
+}
+
+enum SubmissionStatus {
+  PENDING
+  ACCEPTED
+  WRONG_ANSWER
+  TIME_LIMIT_EXCEEDED
+  MEMORY_LIMIT_EXCEEDED
+  RUNTIME_ERROR
+  COMPILATION_ERROR
+}
