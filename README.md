@@ -23,9 +23,24 @@ A coding interview practice platform built with Next.js, TypeScript, and Prisma.
 
 Open [http://localhost:3000](http://localhost:3000) to view the app.
 
+## � Deploy to Vercel
+
+1. **Set up PostgreSQL:**
+   - Go to Vercel dashboard > Your project > Storage > Create Database > PostgreSQL
+   - Copy the `DATABASE_URL` from the database settings
+
+2. **Environment Variables:**
+   - In Vercel project settings, add `DATABASE_URL` with the Postgres connection string
+
+3. **Deploy:**
+   - Push to GitHub, Vercel will auto-deploy
+   - The build script runs `db:push` automatically
+   - After first deploy, run `npm run db:seed` in Vercel functions or via CLI
+
 ## 🗄️ Database
 
-- Uses SQLite for local development
+- **Local:** SQLite for development (change schema.prisma provider to "sqlite" for local)
+- **Production:** PostgreSQL (Vercel Postgres recommended)
 - Schema managed with Prisma
 - Seeded with 1500+ coding problems
 
