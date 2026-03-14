@@ -70,6 +70,28 @@ bun run build
 bun start
 ```
 
+## 🗄️ Database Setup (local)
+
+1. Copy the example env file:
+
+```bash
+cp .env.example .env
+```
+
+2. Create/update the SQLite schema:
+
+```bash
+npm run db:push
+```
+
+3. Seed the database with sample problems:
+
+```bash
+npm run db:seed
+```
+
+> Note: `.env` is ignored by git; you can safely store local settings here.
+
 Open [http://localhost:3000](http://localhost:3000) to see your application running.
 
 ## 🤖 Powered by Z.ai
