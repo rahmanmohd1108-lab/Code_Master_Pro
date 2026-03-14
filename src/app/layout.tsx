@@ -14,22 +14,33 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CodeMaster Pro - Master Coding Interviews",
-  description: "Practice coding problems, track your progress, and prepare for technical interviews at top tech companies. Similar to LeetCode with company-specific problem filtering.",
-  keywords: ["CodeMaster Pro", "LeetCode", "coding interviews", "algorithm practice", "data structures", "technical interviews", "Google interview", "Amazon interview", "Microsoft interview"],
-  authors: [{ name: "CodeMaster Pro Team" }],
+  title: "Code Master Pro",
+  description: "Practice coding problems, track your progress, and prepare for technical interviews at top tech companies.",
+  keywords: ["Code Master Pro", "LeetCode", "coding interviews", "algorithm practice", "data structures", "technical interviews", "Google interview", "Amazon interview", "Microsoft interview"],
+  authors: [{ name: "Code Master Pro Team" }],
   icons: {
     icon: "/logo.svg",
+    shortcut: "/logo.svg",
+    apple: "/logo.svg",
   },
   openGraph: {
-    title: "CodeMaster Pro - Master Coding Interviews",
+    title: "Code Master Pro",
     description: "Practice coding problems and prepare for technical interviews",
     type: "website",
+    images: [
+      {
+        url: "/logo.svg",
+        width: 600,
+        height: 600,
+        alt: "Code Master Pro logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "CodeMaster Pro",
+    title: "Code Master Pro",
     description: "Master coding interviews with practice problems",
+    images: ["/logo.svg"],
   },
 };
 
